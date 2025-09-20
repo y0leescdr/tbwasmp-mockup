@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sari-Sari Intelligence Hub - At-a-Glance Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #f0f2f5;
+            --bg-container: #ffffff;
+            --border-color: #e5e7eb;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-light: #6b7280;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #eff6ff;
+            --accent-blue-dark: #1e40af;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+        }
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 24px;
+        }
+        .top-bar {
+            background-color: var(--bg-container);
+            padding: 16px 24px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-title h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+        .header-title p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 2px 0 0;
+        }
+        .filters {
+            display: flex;
+            gap: 16px;
+        }
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+        .select-wrapper { position: relative; }
+        .select-wrapper::after {
+            content: '▼';
+            font-size: 10px;
+            color: var(--text-light);
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        .filters select {
+            padding: 8px 32px 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #f9fafb;
+            -webkit-appearance: none; appearance: none;
+            cursor: pointer;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        .left-panel, .map-panel {
+            background-color: var(--bg-container);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            overflow-y: auto;
+        }
+        .panel-section { margin-bottom: 24px; }
+        .panel-section:last-child { margin-bottom: 0; }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 16px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .kpi-card .label { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+        .kpi-card .value { font-size: 28px; font-weight: 700; color: var(--accent-blue); }
+        .kpi-card .value.dark { color: var(--text-primary); }
+
+        .gemini-insight {
+            background-color: var(--accent-blue-light);
+            border: 1px solid #93c5fd;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .gemini-insight .insight-header {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+        }
+        .gemini-insight .insight-header span { font-weight: 600; color: var(--accent-blue-dark); }
+        .gemini-insight p { margin: 0; font-size: 14px; line-height: 1.6; color: #1d4ed8; }
+
+        .chart-item { margin-bottom: 12px; }
+        .chart-item .chart-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+        .chart-bar-container { background-color: #f3f4f6; border-radius: 4px; overflow: hidden; }
+        .chart-bar { background-color: #60a5fa; height: 8px; border-radius: 4px; }
+        
+        .opportunity-list-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px;
+            border-radius: 10px; transition: background-color 0.2s; cursor: pointer;
+        }
+        .opportunity-list-item:hover { background-color: #f9fafb; }
+        .opportunity-list-item .icon { font-size: 20px; }
+        .opportunity-list-item .name { font-weight: 500; font-size: 14px; }
+        .opportunity-list-item .score { font-size: 13px; color: #16a34a; margin-left: auto; font-weight: 600; }
+
+        .map-panel {
+            position: relative;
+            background-image: url('heatmap.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .map-controls {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(5px);
+            padding: 8px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-md);
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <div class="top-bar">
+        <div class="header-title">
+            <h1>Sari-Sari Intelligence Hub: <strong>Brgy. Batasan Hills, QC</strong></h1>
+            <p>Pilot Concept for TBWA/SMP & JTI</p>
+        </div>
+        <div class="filters">
+            <div class="filter-group">
+                <label for="population">Population Density</label>
+                <div class="select-wrapper">
+                    <select id="population"><option>All Densities</option></select>
+                </div>
+            </div>
+            <div class="filter-group">
+                <label for="competition">Competitor Saturation</label>
+                <div class="select-wrapper">
+                    <select id="competition"><option>All Levels</option></select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <div class="panel-section">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="label">Detected Sari-Sari Stores</div>
+                        <div class="value">1,284</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="label">Estimated Population</div>
+                        <div class="value dark">161,409</div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-section gemini-insight">
+                <div class="insight-header">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-blue-dark);"><path d="M12 3a6 6 0 0 0 9 9a9 9 0 1 1-9-9Z"></path></svg>
+                    <span>Gemini Strategic Insight</span>
+                </div>
+                <p>High population and school density indicate consistent foot traffic. The low ratio of chain convenience stores to sari-sari stores presents a key opportunity for JTI to capture the independent retail market through targeted loyalty and distribution programs.</p>
+            </div>
+            <div class="panel-section">
+                <h2 class="section-title">Points of Interest</h2>
+                <div class="poi-chart">
+                    <div class="chart-item">
+                        <div class="chart-label"><span>Schools</span><span>22</span></div>
+                        <div class="chart-bar-container"><div class="chart-bar" style="width: 100%;"></div></div>
+                    </div>
+                    <div class="chart-item">
+                        <div class="chart-label"><span>Convenience Store Chains</span><span>15</span></div>
+                        <div class="chart-bar-container"><div class="chart-bar" style="width: 68%;"></div></div>
+                    </div>
+                    <div class="chart-item">
+                        <div class="chart-label"><span>Supermarkets</span><span>8</span></div>
+                        <div class="chart-bar-container"><div class="chart-bar" style="width: 36%;"></div></div>
+                    </div>
+                </div>
+            </div>
+             <div class="panel-section">
+                <h2 class="section-title">Top Opportunities</h2>
+                <div class="opportunity-list">
+                    <div class="opportunity-list-item">
+                        <div class="icon">📍</div>
+                        <div class="details">
+                            <div class="name">Aling Nena's Store</div>
+                        </div>
+                        <div class="score">Score: 88</div>
+                    </div>
+                     <div class="opportunity-list-item">
+                        <div class="icon">📍</div>
+                        <div class="details">
+                            <div class="name">JP Sari-Sari & Eatery</div>
+                        </div>
+                        <div class="score">Score: 85</div>
+                    </div>
+                     <div class="opportunity-list-item">
+                        <div class="icon">📍</div>
+                        <div class="details">
+                            <div class="name">Batasan Hills Corner Store</div>
+                        </div>
+                        <div class="score">Score: 82</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="map-panel">
+            <div class="map-controls">
+                <!-- Map controls like zoom, layers toggle can go here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
