@@ -9,16 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #f0f2f5;
-            --bg-container: #ffffff;
-            --border-color: #e5e7eb;
-            --text-primary: #111827;
-            --text-secondary: #4b5563;
-            --text-light: #6b7280;
-            --accent-blue: #2563eb;
-            --accent-blue-light: #eff6ff;
-            --accent-blue-dark: #1e40af;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            /* Dark Theme Palette */
+            --bg-main: #0f172a; /* Slate 900 */
+            --bg-container: #1e293b; /* Slate 800 */
+            --border-color: #334155; /* Slate 700 */
+            --text-primary: #f1f5f9; /* Slate 100 */
+            --text-secondary: #cbd5e1; /* Slate 300 */
+            --text-light: #94a3b8; /* Slate 400 */
+            --accent-blue: #3b82f6;
+            --accent-green: #22c55e;
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
         }
         * { box-sizing: border-box; }
@@ -41,11 +40,20 @@
             background-color: var(--bg-container);
             padding: 16px 24px;
             border-radius: 16px;
-            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
             margin-bottom: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .logo-img {
+            height: 40px;
+            width: auto;
         }
         .header-title h1 {
             font-size: 20px;
@@ -82,7 +90,8 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 14px;
-            background-color: #f9fafb;
+            background-color: #0f172a;
+            color: var(--text-primary);
             -webkit-appearance: none; appearance: none;
             cursor: pointer;
         }
@@ -97,7 +106,7 @@
         .left-panel, .map-panel {
             background-color: var(--bg-container);
             border-radius: 16px;
-            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
             overflow: hidden;
         }
         .left-panel {
@@ -123,33 +132,34 @@
         }
         .kpi-card .label { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
         .kpi-card .value { font-size: 28px; font-weight: 700; color: var(--accent-blue); }
-        .kpi-card .value.dark { color: var(--text-primary); }
+        .kpi-card .value.light { color: var(--text-primary); }
 
         .gemini-insight {
-            background-color: var(--accent-blue-light);
-            border: 1px solid #93c5fd;
+            background-color: #1e3a8a;
+            border: 1px solid #2563eb;
             border-radius: 12px;
             padding: 20px;
         }
         .gemini-insight .insight-header {
             display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
         }
-        .gemini-insight .insight-header span { font-weight: 600; color: var(--accent-blue-dark); }
-        .gemini-insight p { margin: 0; font-size: 14px; line-height: 1.6; color: #1d4ed8; }
+        .gemini-insight .insight-header span { font-weight: 600; color: #dbeafe; }
+        .gemini-insight p { margin: 0; font-size: 14px; line-height: 1.6; color: #bfdbfe; }
+        .gemini-insight strong { color: #ffffff; }
 
         .chart-item { margin-bottom: 12px; }
         .chart-item .chart-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
-        .chart-bar-container { background-color: #f3f4f6; border-radius: 4px; overflow: hidden; }
-        .chart-bar { background-color: #60a5fa; height: 8px; border-radius: 4px; }
+        .chart-bar-container { background-color: #334155; border-radius: 4px; overflow: hidden; }
+        .chart-bar { background-color: var(--accent-blue); height: 8px; border-radius: 4px; }
         
         .opportunity-list-item {
             display: flex; align-items: center; gap: 12px; padding: 12px;
             border-radius: 10px; transition: background-color 0.2s; cursor: pointer;
         }
-        .opportunity-list-item:hover { background-color: #f9fafb; }
+        .opportunity-list-item:hover { background-color: #334155; }
         .opportunity-list-item .icon { font-size: 20px; }
         .opportunity-list-item .name { font-weight: 500; font-size: 14px; }
-        .opportunity-list-item .score { font-size: 13px; color: #16a34a; margin-left: auto; font-weight: 600; }
+        .opportunity-list-item .score { font-size: 13px; color: var(--accent-green); margin-left: auto; font-weight: 600; }
 
         .map-panel {
             position: relative;
@@ -161,11 +171,11 @@
             position: absolute;
             top: 16px;
             right: 16px;
-            background: rgba(255,255,255,0.8);
+            background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(5px);
             padding: 8px;
             border-radius: 10px;
-            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
         }
     </style>
 </head>
@@ -174,8 +184,11 @@
 <div class="dashboard-container">
     <div class="top-bar">
         <div class="header-title">
-            <h1>Sari-Sari Intelligence Hub: <strong>Brgy. Batasan Hills, QC</strong></h1>
-            <p>Pilot Concept for TBWA/SMP & JTI</p>
+            <img src="tbwasmp-logo.png" alt="TBWA/SMP Logo" class="logo-img">
+            <div>
+                <h1>Sari-Sari Intelligence Hub: <strong>Brgy. Batasan Hills, QC</strong></h1>
+                <p>Pilot Concept for TBWA/SMP & JTI</p>
+            </div>
         </div>
         <div class="filters">
             <div class="filter-group">
@@ -202,13 +215,13 @@
                     </div>
                     <div class="kpi-card">
                         <div class="label">Estimated Population</div>
-                        <div class="value dark">161,409</div>
+                        <div class="value light">161,409</div>
                     </div>
                 </div>
             </div>
             <div class="panel-section gemini-insight">
                 <div class="insight-header">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-blue-dark);"><path d="M12 3a6 6 0 0 0 9 9a9 9 0 1 1-9-9Z"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #dbeafe;"><path d="M12 3a6 6 0 0 0 9 9a9 9 0 1 1-9-9Z"></path></svg>
                     <span>Gemini Strategic Insight</span>
                 </div>
                 <p>High population and school density indicate consistent foot traffic. The low ratio of chain convenience stores to sari-sari stores presents a key opportunity for JTI to capture the independent retail market through targeted loyalty and distribution programs.</p>
